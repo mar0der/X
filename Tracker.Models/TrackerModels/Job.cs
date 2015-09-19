@@ -1,9 +1,14 @@
-﻿namespace Tracker.Models.Models
+﻿namespace Tracker.Models.TrackerModels
 {
+    #region
+
     using System;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
+
     using Tracker.Models.Enum;
+
+    #endregion
 
     public class Job
     {
@@ -30,7 +35,7 @@
         public User User { get; set; }
 
         public DateTime LastAction { get; set; }
-        
+
         public Priority Priority { get; set; }
     }
 }

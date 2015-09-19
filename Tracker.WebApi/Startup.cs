@@ -1,18 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.Owin;
-using Owin;
+﻿#region
 
-[assembly: OwinStartup(typeof(Tracker.WebApi.Startup))]
+using Microsoft.Owin;
+
+using Tracker.WebApi;
+
+#endregion
+
+[assembly: OwinStartup(typeof(Startup))]
 
 namespace Tracker.WebApi
 {
+    #region
+
+    using Owin;
+
+    #endregion
+
     public partial class Startup
     {
         public void Configuration(IAppBuilder app)
         {
-            ConfigureAuth(app);
+            this.ConfigureAuth(app);
         }
     }
 }

@@ -2,7 +2,8 @@
 {
     using Microsoft.AspNet.Identity.EntityFramework;
     using System.Data.Entity;
-    using Tracker.Models.Models;
+
+    using Tracker.Models.TrackerModels;
 
     public class TrackerDbContext : IdentityDbContext<User>
     {

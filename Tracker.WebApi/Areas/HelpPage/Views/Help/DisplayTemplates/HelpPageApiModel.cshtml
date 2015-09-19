@@ -1,11 +1,7 @@
-@using System.Web.Http
-@using System.Web.Http.Description
-@using Tracker.WebApi.Areas.HelpPage.Models
-@using Tracker.WebApi.Areas.HelpPage.ModelDescriptions
-@model HelpPageApiModel
+@model Tracker.WebApi.Areas.HelpPage.Models.HelpPageApiModel
 
 @{
-    ApiDescription description = Model.ApiDescription;
+    var description = Model.ApiDescription;
 }
 <h1>@description.HttpMethod.Method @description.RelativePath</h1>
 <div>

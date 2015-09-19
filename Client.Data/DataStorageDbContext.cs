@@ -1,13 +1,14 @@
 ﻿namespace Data
 {
-    using Data.Migrations;
-    using Models.Models;
-    using System;
-    using System.Collections.Generic;
+    #region
+
     using System.Data.Entity;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
+
+    using Data.Migrations;
+
+    using Tracker.Models.DataModels;
+
+    #endregion
 
     public class DataStorageDbContext : DbContext
     {

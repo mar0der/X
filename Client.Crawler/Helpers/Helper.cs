@@ -1,6 +1,12 @@
 ﻿namespace Crawler.Helpers
 {
+    #region
+
     using System.Collections.Generic;
+
+    using Crawler.Parsers;
+
+    #endregion
 
     public class Helper
     {

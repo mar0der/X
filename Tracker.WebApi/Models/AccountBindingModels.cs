@@ -1,11 +1,12 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using Newtonsoft.Json;
-
-namespace Tracker.WebApi.Models
+﻿namespace Tracker.WebApi.Models
 {
-    // Models used as parameters to AccountController actions.
+    #region
 
+    using System.ComponentModel.DataAnnotations;
+
+    #endregion
+
+    // Models used as parameters to AccountController actions.
     public class AddExternalLoginBindingModel
     {
         [Required]
@@ -34,7 +35,6 @@ namespace Tracker.WebApi.Models
 
     public class RegisterBindingModel
     {
-
         [Required]
         [Display(Name = "Username")]
         public string Username { get; set; }

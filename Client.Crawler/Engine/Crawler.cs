@@ -1,15 +1,18 @@
-﻿using Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace Crawler
+﻿namespace Crawler.Engine
 {
-    class Crawler
+    #region
+
+    using System;
+    using System.Threading;
+
+    using Data;
+
+    using global::Crawler.Helpers;
+    using global::Crawler.Parsers;
+
+    #endregion
+
+    internal class Crawler
     {
         private int deep;
 
@@ -28,6 +31,7 @@ namespace Crawler
             {
                 return this.deep;
             }
+
             set
             {
                 if (value < 0)
@@ -43,20 +47,21 @@ namespace Crawler
 
         public DataStorageDbContext DbContext { get; set; }
 
-
         public void Crawl(string pageLink)
         {
             this.Requests++;
-            //ItunesDbContext context = new ItunesDbContext();
+
+            // ItunesDbContext context = new ItunesDbContext();
             var content = new Requester().Get(pageLink);
             var allLinks = Parser.ExtractLinks(content);
             var itunesLinks = ItunesParser.ExtractItunesLinks(allLinks);
-            //var links = new HashSet<string>(itunesLinks);
-            //Console.WriteLine(pageLink);
+
+            // var links = new HashSet<string>(itunesLinks);
+            // Console.WriteLine(pageLink);
             foreach (var link in allLinks)
             {
-                //var t = new Thread(() => this.SaveLinkContent(LinkBuilder.CreateLink(pageLink, link)));
-                //t.Start();
+                // var t = new Thread(() => this.SaveLinkContent(LinkBuilder.CreateLink(pageLink, link)));
+                // t.Start();
                 if (ItunesParser.IsApp(link))
                 {
                     this.SaveLinkContent(link);
@@ -79,22 +84,22 @@ namespace Crawler
             var id = ItunesParser.ExtractId(link);
             new Requester().Get("https://itunes.apple.com/lookup?id=" + id);
             Console.WriteLine(id);
-            //ItunesDbContext context = new ItunesDbContext();
-            //DateTime releaseDate, lastUpdate;
 
-            //DateTime.TryParse(ItunesParser.ExtractReleaseDate(pageContent), out releaseDate);
-            //DateTime.TryParse(ItunesParser.ExtractLastUpdateDate(pageContent), out lastUpdate);
+            // ItunesDbContext context = new ItunesDbContext();
+            // DateTime releaseDate, lastUpdate;
 
-            //context.Apps.Add(new App()
-            //{
-            //    AppId = ItunesParser.ExtractAppId(link),
-            //    Name = ItunesParser.ExtractName(pageContent),
-            //    Version = ItunesParser.ExtractVersion(pageContent),
-            //    Description = ItunesParser.ExtractDescription(pageContent)
-            //});
+            // DateTime.TryParse(ItunesParser.ExtractReleaseDate(pageContent), out releaseDate);
+            // DateTime.TryParse(ItunesParser.ExtractLastUpdateDate(pageContent), out lastUpdate);
 
+            // context.Apps.Add(new App()
+            // {
+            // AppId = ItunesParser.ExtractAppId(link),
+            // Name = ItunesParser.ExtractName(pageContent),
+            // Version = ItunesParser.ExtractVersion(pageContent),
+            // Description = ItunesParser.ExtractDescription(pageContent)
+            // });
 
-            //context.SaveChanges();
+            // context.SaveChanges();
         }
     }
 }

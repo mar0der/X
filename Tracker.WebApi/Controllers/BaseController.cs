@@ -1,13 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Http;
-using Tracker.Data;
-using Tracker.Models.Models;
-
-namespace Tracker.WebApi.Controllers
+﻿namespace Tracker.WebApi.Controllers
 {
+    #region
+
+    using System.Linq;
+    using System.Web.Http;
+
+    using Tracker.Data;
+    using Tracker.Models.TrackerModels;
+
+    #endregion
+
     public class BaseController : ApiController
     {
         public BaseController()
@@ -16,7 +18,7 @@ namespace Tracker.WebApi.Controllers
         }
 
         public TrackerDbContext Data { get; set; }
-        
+
         public User CurrentUser
         {
             get

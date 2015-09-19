@@ -1,13 +1,16 @@
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-
 namespace Tracker.WebApi.Areas.HelpPage.ModelDescriptions
 {
+    #region
+
+    using System.Collections.ObjectModel;
+
+    #endregion
+
     public class ParameterDescription
     {
         public ParameterDescription()
         {
-            Annotations = new Collection<ParameterAnnotation>();
+            this.Annotations = new Collection<ParameterAnnotation>();
         }
 
         public Collection<ParameterAnnotation> Annotations { get; private set; }

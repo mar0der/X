@@ -63,6 +63,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration\CrawlerConfig.cs" />
     <Compile Include="Dtos\AppDataDto.cs" />
     <Compile Include="Dtos\AppResultDto.cs" />
     <Compile Include="Dtos\JobDataDto.cs" />

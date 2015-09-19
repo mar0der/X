@@ -4,7 +4,7 @@
     ModelDescription modelDescription = ViewBag.modelDescription;
     if (modelDescription is ComplexTypeModelDescription || modelDescription is EnumTypeModelDescription)
     {
-        if (Model == typeof(Object))
+        if (Model == typeof(object))
         {
             @:Object
         }
@@ -23,4 +23,5 @@
     {
         @Html.DisplayFor(m => modelDescription)
     }
+
 }

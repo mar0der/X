@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-
-namespace Crawler
+﻿namespace Crawler
 {
+    #region
+
+    using System.Collections.Generic;
+    using System.Text.RegularExpressions;
+
+    #endregion
+
     public class Parser
     {
         public static HashSet<string> ExtractLinks(string content)
@@ -16,15 +16,15 @@ namespace Crawler
                 return new HashSet<string>();
             }
 
-            HashSet<string> links = new HashSet<string>();
+            var links = new HashSet<string>();
             if (string.IsNullOrEmpty(content))
             {
                 return links;
             }
 
-            string extractHrefPattern = "<a.+?href=\"(.+?)\".*?>.+?</a>";
-            Regex regex = new Regex(extractHrefPattern);
-            Match match = regex.Match(content);
+            var extractHrefPattern = "<a.+?href=\"(.+?)\".*?>.+?</a>";
+            var regex = new Regex(extractHrefPattern);
+            var match = regex.Match(content);
 
             while (match.Success)
             {

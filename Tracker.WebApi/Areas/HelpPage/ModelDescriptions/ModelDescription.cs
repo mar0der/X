@@ -1,9 +1,13 @@
-using System;
-
 namespace Tracker.WebApi.Areas.HelpPage.ModelDescriptions
 {
+    #region
+
+    using System;
+
+    #endregion
+
     /// <summary>
-    /// Describes a type model.
+    ///     Describes a type model.
     /// </summary>
     public abstract class ModelDescription
     {

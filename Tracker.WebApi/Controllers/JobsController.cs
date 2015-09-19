@@ -1,25 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Http;
-using Tracker.Models.Enum;
-using System.Data.Entity;
-using Tracker.Models.Models;
-using Tracker.WebApi.Models.Jobs;
-using EntityFramework.Extensions;
-using System.Linq.Expressions;
-using System.Threading.Tasks;
-using System.Threading;
-using Tracker.Data;
-
-namespace Tracker.WebApi.Controllers
+﻿namespace Tracker.WebApi.Controllers
 {
+    #region
+
+    using System;
+    using System.Data.Entity;
+    using System.Linq;
+    using System.Threading;
+    using System.Web.Http;
+
+    using EntityFramework.Extensions;
+
+    using Tracker.Data;
+    using Tracker.Models.Enum;
+    using Tracker.Models.TrackerModels;
+    using Tracker.WebApi.Models.Jobs;
+
+    #endregion
+
     [RoutePrefix("api/jobs")]
     public class JobsController : BaseController
     {
         [Authorize]
         [HttpGet]
+        [Route("GetJob")]
         public IHttpActionResult GetJob()
         {
             if (this.CurrentUser == null)
@@ -27,9 +30,8 @@ namespace Tracker.WebApi.Controllers
                 return this.BadRequest();
             }
 
-            var existingJob = this.Data.Jobs
-                .Include(j => j.Category)
-                .FirstOrDefault(j => j.UserId == this.CurrentUser.Id);
+            var existingJob =
+                this.Data.Jobs.Include(j => j.Category).FirstOrDefault(j => j.UserId == this.CurrentUser.Id);
             if (existingJob != null)
             {
                 return this.Ok(JobViewModel.Create(existingJob));
@@ -38,10 +40,7 @@ namespace Tracker.WebApi.Controllers
             var highPriorityJobsCount = this.Data.Jobs.Count(j => j.Priority == Priority.High);
             if (highPriorityJobsCount == 0)
             {
-                this.Data.Jobs.Update(j => new Job()
-                {
-                    Priority = Priority.High
-                });
+                this.Data.Jobs.Update(j => new Job { Priority = Priority.High });
 
                 highPriorityJobsCount = this.Data.Jobs.Count(j => j.Priority == Priority.High);
             }
@@ -54,12 +53,12 @@ namespace Tracker.WebApi.Controllers
 
             var rand = new Random();
             var skip = rand.Next(0, highPriorityJobsCount);
-            var job = this.Data.Jobs
-                .Include(j => j.Category)
-                .Where(j => j.Priority == Priority.High)
-                .OrderBy(j => j.Id)
-                .Skip(skip)
-                .FirstOrDefault();
+            var job =
+                this.Data.Jobs.Include(j => j.Category)
+                    .Where(j => j.Priority == Priority.High)
+                    .OrderBy(j => j.Id)
+                    .Skip(skip)
+                    .FirstOrDefault();
 
             if (job == null)
             {
@@ -74,10 +73,16 @@ namespace Tracker.WebApi.Controllers
 
         [Authorize]
         [HttpPost]
+        [Route("GenerateJobs")]
         public IHttpActionResult GenerateJobs()
         {
             var context = new TrackerDbContext();
             var categoryLetterLastPages = context.CategoryLetterLastPages.ToList();
+
+            if (categoryLetterLastPages.Count == 0)
+            {
+                return this.BadRequest("No Categories found!. Please run api/categories/CategoryLetterLastPages first!");
+            }
 
             foreach (var categoryLetterLastPage in categoryLetterLastPages)
             {
@@ -89,26 +94,26 @@ namespace Tracker.WebApi.Controllers
 
                 while (startPage <= pages)
                 {
-                    int jobPages = rand.Next(minPagesPerJob, maxPagesPerJob);
-                    int lastPage = jobPages + startPage - 1;//changed
+                    var jobPages = rand.Next(minPagesPerJob, maxPagesPerJob);
+                    var lastPage = jobPages + startPage - 1; // changed
                     if (lastPage > pages)
                     {
                         jobPages = pages - startPage + 1;
                         lastPage = pages;
                     }
 
-                    context.Jobs.Add(new Job()
-                    {
-                        CategoryId = categoryLetterLastPage.CategoryId,
-                        CrawledPages = 0,
-                        Letter = categoryLetterLastPage.Letter,
-                        StartPage = startPage,
-                        PagesCount = jobPages,
-                        IsLast = lastPage == pages,
-                        LastAction = DateTime.Now,
-                        Priority = Priority.Low
-                        //UserId = this.CurrentUser.Id
-                    });
+                    context.Jobs.Add(
+                        new Job
+                            {
+                                CategoryId = categoryLetterLastPage.CategoryId, 
+                                CrawledPages = 0, 
+                                Letter = categoryLetterLastPage.Letter, 
+                                StartPage = startPage, 
+                                PagesCount = jobPages, 
+                                IsLast = lastPage == pages, 
+                                LastAction = DateTime.Now, 
+                                Priority = Priority.Low
+                            });
 
                     startPage = lastPage + 1;
                 }

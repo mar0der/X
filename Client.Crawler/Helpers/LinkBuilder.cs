@@ -1,25 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-
-namespace Crawler
+﻿namespace Crawler.Helpers
 {
+    #region
+
+    using System.Text.RegularExpressions;
+
+    #endregion
+
     public static class LinkBuilder
     {
         public static string GetClearLink(string url)
         {
             var pattern = @":\/\/\w+?\.\w+?\/?.+?(\/\w+\.\w+)";
-            Regex regex = new Regex(pattern);
-            Match match = regex.Match(url);
+            var regex = new Regex(pattern);
+            var match = regex.Match(url);
             match.NextMatch();
             var file = match.Groups[1].Value;
             var result = url;
             if (file.Length > 0)
             {
-                result = result.Replace(file, "");
+                result = result.Replace(file, string.Empty);
             }
 
             return result;
@@ -32,7 +31,7 @@ namespace Crawler
                 return path;
             }
 
-            var clearLink = LinkBuilder.GetClearLink(link);
+            var clearLink = GetClearLink(link);
 
             if (clearLink.EndsWith("/"))
             {

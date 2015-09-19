@@ -1,18 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-
-namespace Tracker.WebApi.Controllers
+﻿namespace Tracker.WebApi.Controllers
 {
+    #region
+
+    using System.Web.Mvc;
+
+    #endregion
+
     public class HomeController : Controller
     {
         public ActionResult Index()
         {
-            ViewBag.Title = "Home Page";
+            this.ViewBag.Title = "Home Page";
 
-            return View();
+            return this.View();
         }
     }
 }

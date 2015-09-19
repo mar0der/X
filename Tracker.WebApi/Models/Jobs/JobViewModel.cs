@@ -1,8 +1,14 @@
-﻿using System;
-using System.Linq.Expressions;
-using Tracker.Models.Models;
-namespace Tracker.WebApi.Models.Jobs
+﻿namespace Tracker.WebApi.Models.Jobs
 {
+    #region
+
+    using System;
+    using System.Linq.Expressions;
+
+    using Tracker.Models.TrackerModels;
+
+    #endregion
+
     public class JobViewModel
     {
         public int Id { get; set; }
@@ -21,35 +27,37 @@ namespace Tracker.WebApi.Models.Jobs
 
         public bool IsLast { get; set; }
 
-        public static JobViewModel Create(Job model)
-        {
-            return new JobViewModel()
-            {
-                Id = model.Id,
-                CategoryId = model.CategoryId,
-                CategoryUrl = model.Category.Link,
-                Letter = model.Letter,
-                StartPage = model.StartPage,
-                PagesCount = model.PagesCount,
-                IsLast = model.IsLast,
-            };
-        }
-
         public static Expression<Func<Job, JobViewModel>> ViewModel
         {
             get
             {
-                return model => new JobViewModel()
-                {
-                    Id = model.Id,
-                    CategoryId = model.CategoryId,
-                    CategoryUrl = model.Category.Link,
-                    Letter = model.Letter,
-                    StartPage = model.StartPage,
-                    PagesCount = model.PagesCount,
-                    IsLast = model.IsLast,
-                };
+                return
+                    model =>
+                    new JobViewModel
+                        {
+                            Id = model.Id, 
+                            CategoryId = model.CategoryId, 
+                            CategoryUrl = model.Category.Link, 
+                            Letter = model.Letter, 
+                            StartPage = model.StartPage, 
+                            PagesCount = model.PagesCount, 
+                            IsLast = model.IsLast
+                        };
             }
+        }
+
+        public static JobViewModel Create(Job model)
+        {
+            return new JobViewModel
+                       {
+                           Id = model.Id, 
+                           CategoryId = model.CategoryId, 
+                           CategoryUrl = model.Category.Link, 
+                           Letter = model.Letter, 
+                           StartPage = model.StartPage, 
+                           PagesCount = model.PagesCount, 
+                           IsLast = model.IsLast
+                       };
         }
     }
 }

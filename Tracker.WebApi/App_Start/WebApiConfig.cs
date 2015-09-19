@@ -1,13 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Web.Http;
-using Microsoft.Owin.Security.OAuth;
-using Newtonsoft.Json.Serialization;
-
-namespace Tracker.WebApi
+﻿namespace Tracker.WebApi
 {
+    #region
+
+    using System.Web.Http;
+
+    using Microsoft.Owin.Security.OAuth;
+
+    using Newtonsoft.Json.Serialization;
+
+    #endregion
+
     public static class WebApiConfig
     {
         public static void Register(HttpConfiguration config)
@@ -20,13 +22,10 @@ namespace Tracker.WebApi
             // Web API routes
             config.MapHttpAttributeRoutes();
 
-            config.Routes.MapHttpRoute(
-                name: "DefaultApi",
-                routeTemplate: "api/{controller}/{id}",
-                defaults: new { id = RouteParameter.Optional }
-            );
+            config.Routes.MapHttpRoute("DefaultApi", "api/{controller}/{id}", new { id = RouteParameter.Optional });
 
-            config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            config.Formatters.JsonFormatter.SerializerSettings.ContractResolver =
+                new CamelCasePropertyNamesContractResolver();
         }
     }
 }

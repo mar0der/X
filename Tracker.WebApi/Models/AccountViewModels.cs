@@ -1,10 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Tracker.WebApi.Models
+﻿namespace Tracker.WebApi.Models
 {
-    // Models returned by AccountController actions.
+    #region
 
+    using System.Collections.Generic;
+
+    #endregion
+
+    // Models returned by AccountController actions.
     public class ExternalLoginViewModel
     {
         public string Name { get; set; }

@@ -1,19 +1,20 @@
-﻿using Microsoft.AspNet.Identity.EntityFramework;
-using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Tracker.Data.Migrations;
-using Tracker.Models.Models;
-
-namespace Tracker.Data
+﻿namespace Tracker.Data
 {
+    #region
+
+    using System.Data.Entity;
+
+    using Microsoft.AspNet.Identity.EntityFramework;
+
+    using Tracker.Data.Migrations;
+    using Tracker.Models.TrackerModels;
+
+    #endregion
+
     public class TrackerDbContext : IdentityDbContext<User>
     {
         public TrackerDbContext()
-            : base("TrackerDbConnection", throwIfV1Schema: false)
+            : base("TrackerDbConnection", false)
         {
             Database.SetInitializer(new MigrateDatabaseToLatestVersion<TrackerDbContext, Configuration>());
         }

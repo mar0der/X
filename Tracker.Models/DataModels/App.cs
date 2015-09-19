@@ -1,8 +1,11 @@
-﻿namespace Models.Models
+﻿namespace Tracker.Models.DataModels
 {
+    #region
+
     using System;
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+
+    #endregion
 
     public class App
     {

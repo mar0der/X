@@ -1,8 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
-namespace Crawler
+﻿namespace Crawler
 {
+    #region
+
+    using System;
+    using System.Collections.Generic;
+    using System.Text.RegularExpressions;
+
+    #endregion
+
     public static class ItunesParser
     {
         public static bool IsApp(string url)
@@ -32,9 +37,9 @@ namespace Crawler
                 return null;
             }
 
-            string extractHrefPattern = @"\/id(\d+)?\?";
-            Regex regex = new Regex(extractHrefPattern);
-            Match match = regex.Match(url);
+            var extractHrefPattern = @"\/id(\d+)?\?";
+            var regex = new Regex(extractHrefPattern);
+            var match = regex.Match(url);
             match.NextMatch();
             var stringId = match.Groups[1].Value;
 
@@ -51,8 +56,8 @@ namespace Crawler
 
         public static string ExtractCategoryName(string url)
         {
-            string pattern = @"\/ios-(.+?)\/id";
-            string result = FirstMatched(url, pattern);
+            var pattern = @"\/ios-(.+?)\/id";
+            var result = FirstMatched(url, pattern);
 
             if (result != null)
             {
@@ -95,7 +100,7 @@ namespace Crawler
 
         public static string ExtractItem(string content, string itemName, string tagName)
         {
-            string pattern = "<" + tagName + " itemprop=\"" + itemName + "\">(.+?)<\\/" + tagName + ">";
+            var pattern = "<" + tagName + " itemprop=\"" + itemName + "\">(.+?)<\\/" + tagName + ">";
             var matchedValue = FirstMatched(content, pattern);
 
             return Parser.RemoveTags(matchedValue);
@@ -108,8 +113,8 @@ namespace Crawler
                 return null;
             }
 
-            Regex regex = new Regex(pattern);
-            Match match = regex.Match(content);
+            var regex = new Regex(pattern);
+            var match = regex.Match(content);
             match.NextMatch();
             string matchedValue;
             try

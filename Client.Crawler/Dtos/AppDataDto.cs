@@ -1,10 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Crawler.Dtos
+﻿namespace Crawler.Dtos
 {
+    #region
+
+    using System;
+    using System.Collections.Generic;
+
+    #endregion
+
     public class AppDataDto
     {
         public string ArtworkUrl60 { get; set; }
