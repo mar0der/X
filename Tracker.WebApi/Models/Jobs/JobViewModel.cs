@@ -41,6 +41,7 @@
                             Letter = model.Letter, 
                             StartPage = model.StartPage, 
                             PagesCount = model.PagesCount, 
+                            CrawledPages = model.CrawledPages,
                             IsLast = model.IsLast
                         };
             }
@@ -54,8 +55,9 @@
                            CategoryId = model.CategoryId, 
                            CategoryUrl = model.Category.Link, 
                            Letter = model.Letter, 
-                           StartPage = model.StartPage, 
-                           PagesCount = model.PagesCount, 
+                           StartPage = model.StartPage,
+                           PagesCount = model.PagesCount,
+                           CrawledPages = model.CrawledPages,
                            IsLast = model.IsLast
                        };
         }

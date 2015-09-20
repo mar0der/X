@@ -12,6 +12,7 @@
     using Crawler.Helpers;
     using Crawler.Parsers;
     using Crawler.Configuration;
+    using System.Data.Entity.Migrations;
 
     using Data;
 
@@ -28,20 +29,38 @@
             // TODO: put this in a real engine
             var requester = new Requester();
             var js = new JavaScriptSerializer();
-            string accessToken;
+            string accessToken = null;
             string jobJson;
-
+            UserManager userManger = null;
             while (true)
             {
-                accessToken = GetAccessToken();
+                if (accessToken == null)
+                {
+                    userManger = new UserManager();
+                    Console.Write("Username: ");
+                    var username = Console.ReadLine();
+                    Console.Write("Password: ");
+                    var password = Console.ReadLine();
+                    if (userManger.Login(username, password))
+                    {
+                        accessToken = userManger.AccessToken;
+                        requester.Headers.Add("Authorization", "Bearer " + accessToken);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Unable to login.");
+                        break;
+                    }
+                }
+
                 if (!string.IsNullOrEmpty(accessToken))
                 {
-                    requester.Headers.Add("Authorization", "Bearer " + accessToken);
-                    jobJson = requester.Get(CrawlerConfig.TrackerDomain + "api/Jobs");
+                    jobJson = requester.Get(CrawlerConfig.TrackerDomain + "api/Jobs/GetJob");
                     if (jobJson != null)
                     {
                         var jobData = js.Deserialize<JobDataDto>(jobJson);
-                        CrawlJob(jobData);
+                        CrawlJob(jobData, userManger.Username);
+
                     }
                     else
                     {
@@ -57,15 +76,15 @@
             }
         }
 
-        public static void CrawlJob(JobDataDto job)
+        public static void CrawlJob(JobDataDto job, string username)
         {
             var startPage = job.StartPage + job.CrawledPages;
-            var lastPage = job.StartPage + job.PagesCount;
+            var lastPage = job.StartPage + job.PagesCount - 1;
             var dataStorageContext = new DataStorageDbContext();
             var trackerDbContext = new TrackerDbContext();
 
             //TODO if last page and fix the other warnigns
-            for (var page = startPage; page < lastPage; page++)
+            for (var page = startPage; page <= lastPage; page++)
             {
                 var link = string.Format("{0}&letter={1}&page={2}", job.CategoryUrl, job.Letter, page);
                 var content = new Requester().Get(link);
@@ -80,9 +99,14 @@
                     var result = js.Deserialize<AppResultDto>(json);
                     var app = result.Results[0];
                     Console.Clear();
-                    Console.WriteLine("Page: {0}", page);
-                    Console.WriteLine("{0} of {1}", passedApps, allAppsLinks.Count);
-                    dataStorageContext.Apps.Add(
+                    Console.WriteLine("Hello, {0}", username);
+                    Console.WriteLine(new string('-', 20));
+                    Console.WriteLine("Category: {0}", job.CategoryId);
+                    Console.WriteLine("Letter: {0}", job.Letter);
+                    Console.WriteLine("Page: {0} of {1}", page, lastPage);
+                    Console.WriteLine("Application: {0} of {1}", passedApps, allAppsLinks.Count);
+                    Console.WriteLine("App name: {0}", app.TrackName);
+                    dataStorageContext.Apps.AddOrUpdate(
                         new App
                             {
                                 TrackId = app.TrackId, 
@@ -138,113 +162,5 @@
             }
         }
 
-        //public static void CrawlCategory(string categoryUrl)
-        //{
-        //    char[] letters =
-        //        {
-        //            'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 
-        //            'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '*'
-        //        };
-
-        //    var currentLink = string.Empty;
-        //    var context = new DataStorageDbContext();
-        //    if (ItunesParser.ExtractId(categoryUrl) == 6018)
-        //    {
-        //        letters = new[] { '*' };
-        //    }
-
-        //    foreach (var letter in letters)
-        //    {
-        //        var page = 1;
-        //        while (true)
-        //        {
-        //            currentLink =
-        //                string.Format(
-        //                    "https://itunes.apple.com/us/genre/ios-books/id6018?mt=8&letter={0}&page={1}#page", 
-        //                    letter, 
-        //                    page);
-        //            var content = new Requester().Get(currentLink);
-        //            var allLinks = Parser.ExtractLinks(content);
-        //            var allAppsLinks = ItunesParser.ExtractItunesLinks(allLinks);
-        //            if (allAppsLinks.Count < 2)
-        //            {
-        //                break;
-        //            }
-
-        //            foreach (var appLink in allAppsLinks)
-        //            {
-        //                var id = ItunesParser.ExtractId(appLink);
-        //                var json = new Requester().Get("https://itunes.apple.com/lookup?id=" + id);
-        //                var js = new JavaScriptSerializer();
-        //                var result = js.Deserialize<AppResultDto>(json);
-        //                var app = result.Results[0];
-        //                Console.Clear();
-        //                Console.WriteLine(
-        //                    "{0} - {1} - {2} - {3}", 
-        //                    ItunesParser.ExtractId(categoryUrl), 
-        //                    letter, 
-        //                    page, 
-        //                    id);
-        //                context.Apps.Add(
-        //                    new App
-        //                        {
-        //                            TrackId = app.TrackId, 
-        //                            TrackName = app.TrackName, 
-        //                            ArtistId = app.ArtistId, 
-        //                            ArtistName = app.ArtistName, 
-        //                            ArtistViewUrl = app.ArtistViewUrl, 
-        //                            ArtworkUrl100 = app.ArtworkUrl100, 
-        //                            ArtworkUrl512 = app.ArtworkUrl512, 
-        //                            ArtworkUrl60 = app.ArtworkUrl60, 
-        //                            AverageUserRating = app.AverageUserRating, 
-        //                            BundleId = app.BundleId, 
-        //                            ContentAdvisoryRating = app.ContentAdvisoryRating, 
-        //                            Currency = app.Currency, 
-        //                            Description = app.Description, 
-        //                            FileSizeBytes = app.FileSizeBytes, 
-        //                            FormattedPrice = app.FormattedPrice, 
-        //                            IsGameCenterEnabled = app.IsGameCenterEnabled, 
-        //                            IsVppDeviceBasedLicensingEnabled = app.IsVppDeviceBasedLicensingEnabled, 
-        //                            Kind = app.Kind, 
-        //                            MinimumOsVersion = app.MinimumOsVersion, 
-        //                            Price = app.Price, 
-        //                            PrimaryGenreId = app.PrimaryGenreId, 
-        //                            PrimaryGenreName = app.PrimaryGenreName, 
-        //                            ReleaseDate = app.ReleaseDate, 
-        //                            ReleaseNotes = app.ReleaseNotes, 
-        //                            SellerName = app.SellerName, 
-        //                            SellerUrl = app.SellerUrl, 
-        //                            TrackCensoredName = app.TrackCensoredName, 
-        //                            TrackContentRating = app.TrackContentRating, 
-        //                            TrackViewUrl = app.TrackViewUrl, 
-        //                            UserRatingCount = app.UserRatingCount, 
-        //                            Version = app.Version, 
-        //                            WrapperType = app.WrapperType
-        //                        });
-        //            }
-
-        //            context.SaveChanges();
-        //            page++;
-        //        }
-        //    }
-        //}
-
-        public static string GetAccessToken()
-        {
-            var username = "gosho";
-            var passowrd = "123456";
-            var grant_type = "password";
-            var urlEncodedPost = string.Format(
-                "username={0}&password={1}&grant_type={2}", 
-                username, 
-                passowrd, 
-                grant_type);
-            var json = new Requester().Post("http://localhost:41167/api/Account/Login", urlEncodedPost);
-
-            var js = new JavaScriptSerializer();
-            var userData = js.Deserialize<UserDataDto>(json);
-
-            return userData.access_token;
-        }
     }
 }

@@ -61,9 +61,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Tracker.Models\Tracker.Models.csproj">
+    <ProjectReference Include="..\Tracker.Models\Common.Models.csproj">
       <Project>{07b4002d-f29a-45db-9b53-cd1afd8154cf}</Project>
-      <Name>Tracker.Models</Name>
+      <Name>Common.Models</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tracker.WebApi", "Tracker.W
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tracker.Data", "Tracker.Data\Tracker.Data.csproj", "{9ECDB3AC-35FC-4903-8256-1371E5EA7B8E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tracker.Models", "Tracker.Models\Tracker.Models.csproj", "{07B4002D-F29A-45DB-9B53-CD1AFD8154CF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Models", "Tracker.Models\Common.Models.csproj", "{07B4002D-F29A-45DB-9B53-CD1AFD8154CF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client.Crawler", "Client.Crawler\Client.Crawler.csproj", "{80D8705D-B4AA-4616-903C-3D46FCFA3FE1}"
 EndProject

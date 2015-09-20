@@ -257,7 +257,9 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -287,9 +289,9 @@
       <Project>{9ecdb3ac-35fc-4903-8256-1371e5ea7b8e}</Project>
       <Name>Tracker.Data</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Tracker.Models\Tracker.Models.csproj">
+    <ProjectReference Include="..\Tracker.Models\Common.Models.csproj">
       <Project>{07b4002d-f29a-45db-9b53-cd1afd8154cf}</Project>
-      <Name>Tracker.Models</Name>
+      <Name>Common.Models</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
