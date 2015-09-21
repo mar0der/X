@@ -13,6 +13,7 @@
     using Crawler.Parsers;
     using Crawler.Configuration;
     using System.Data.Entity.Migrations;
+    using EntityFramework.Extensions;
 
     using Data;
 
@@ -146,12 +147,25 @@
                 }
 
                 passedApps = 0;
-
+               
                 var databaseSavingStatus = dataStorageContext.SaveChanges();
+                var currentJob = trackerDbContext.Jobs.FirstOrDefault(j => j.Id == job.Id);
+                if (content.Contains("Popular Apps") && allAppsLinks.Count == 0)
+                {
+                    // TODO: Fix last page in CategoryLetterLastPages
+                    trackerDbContext.Jobs.Remove(currentJob);
+                    trackerDbContext.SaveChanges();
+                    continue;
+                }
+                if (currentJob == null)
+                {
+                    continue;
+                }
+
                 if (databaseSavingStatus > 0)
                 {
-                    var currentJob = trackerDbContext.Jobs.FirstOrDefault(j => j.Id == job.Id);
                     currentJob.CrawledPages++;
+                    currentJob.LastAction = DateTime.Now;
                     if (currentJob.CrawledPages == job.PagesCount)
                     {
                         trackerDbContext.Jobs.Remove(currentJob);

@@ -14,7 +14,6 @@
         
         public virtual IDbSet<Job> Jobs { get; set; }
 
-
         public static TrackerDbContext Create()
         {
             return new TrackerDbContext();
